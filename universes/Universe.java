@@ -26,6 +26,13 @@ public interface Universe {
 	
 
 	public void update(KeyboardInput keyboard, long actual_delta_time);
+
+
+	public boolean getFailure();
+
+
+	public int getRetry();
+	public int getCarSpeed();
     
 	
 }

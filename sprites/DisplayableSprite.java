@@ -26,6 +26,8 @@ public interface DisplayableSprite {
 	
 //	public boolean setDispose();
 
-	public void update(Universe universe, KeyboardInput keyboard, long actual_delta_time);	
+	public void update(Universe universe, KeyboardInput keyboard, long actual_delta_time);
+
+	
 	
 }

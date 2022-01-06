@@ -88,54 +88,47 @@ public class AnimationFrame extends JFrame {
 		panel.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		getContentPane().add(panel, BorderLayout.CENTER);
 
-		btnPauseRun = new JButton("||");
-		btnPauseRun.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				btnPauseRun_mouseClicked(arg0);
-			}
-		});
+		
+		  btnPauseRun = new JButton("||"); btnPauseRun.addMouseListener(new
+		  MouseAdapter() {
+		  
+		  @Override public void mouseClicked(MouseEvent arg0) {
+		  btnPauseRun_mouseClicked(arg0); } });
+		  
+		  btnPauseRun.setFont(new Font("Tahoma", Font.BOLD, 12));
+		  btnPauseRun.setBounds(20, 20, 48, 32); btnPauseRun.setFocusable(false);
+		  getContentPane().add(btnPauseRun);
+		  getContentPane().setComponentZOrder(btnPauseRun, 0);
+		 
 
-		btnPauseRun.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnPauseRun.setBounds(20, 20, 48, 32);
-		btnPauseRun.setFocusable(false);
-		getContentPane().add(btnPauseRun);
-		getContentPane().setComponentZOrder(btnPauseRun, 0);
-
-		lblTimeLabel = new JLabel("Time: ");
-		lblTimeLabel.setForeground(Color.YELLOW);
-		lblTimeLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblTimeLabel.setBounds(80, 22, 96, 30);
-		getContentPane().add(lblTimeLabel);
-		getContentPane().setComponentZOrder(lblTimeLabel, 0);
-
-		lblTime = new JLabel("000");
-		lblTime.setForeground(Color.YELLOW);
-		lblTime.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblTime.setBounds(192, 22, 320, 30);
-		getContentPane().add(lblTime);
-		getContentPane().setComponentZOrder(lblTime, 0);
-
-		lblLevelLabel = new JLabel("Level: ");
-		lblLevelLabel.setForeground(Color.YELLOW);
-		lblLevelLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblLevelLabel.setBounds(528, 22, 128, 30);
-		getContentPane().add(lblLevelLabel);
-		getContentPane().setComponentZOrder(lblLevelLabel, 0);
-
-		lblLevel = new JLabel("1");
-		lblLevel.setForeground(Color.YELLOW);
-		lblLevel.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblLevel.setBounds(672, 22, 48, 30);
-		getContentPane().add(lblLevel);
-		getContentPane().setComponentZOrder(lblLevel, 0);
-
-		lblStatus = new JLabel("Status");
-		lblStatus.setForeground(Color.WHITE);
-		lblStatus.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblStatus.setBounds(0, SCREEN_HEIGHT - 30 - 16, SCREEN_WIDTH, 36);
-		getContentPane().add(lblStatus);
-		getContentPane().setComponentZOrder(lblStatus, 0);
+		
+		  lblTimeLabel = new JLabel("Speed: ");
+		  lblTimeLabel.setForeground(Color.YELLOW); lblTimeLabel.setFont(new
+		  Font("Tahoma", Font.BOLD, 30)); lblTimeLabel.setBounds(80, 22, 96, 30);
+		  getContentPane().add(lblTimeLabel);
+		  getContentPane().setComponentZOrder(lblTimeLabel, 0);
+		  
+		  lblTime = new JLabel("000"); lblTime.setForeground(Color.YELLOW);
+		  lblTime.setFont(new Font("Tahoma", Font.BOLD, 30)); lblTime.setBounds(192,
+		  22, 320, 30); getContentPane().add(lblTime);
+		  getContentPane().setComponentZOrder(lblTime, 0);
+		  
+		  lblLevelLabel = new JLabel("Retries: ");
+		  lblLevelLabel.setForeground(Color.YELLOW); lblLevelLabel.setFont(new
+		  Font("Tahoma", Font.BOLD, 30)); lblLevelLabel.setBounds(528, 22, 128, 30);
+		  getContentPane().add(lblLevelLabel);
+		  getContentPane().setComponentZOrder(lblLevelLabel, 0);
+		  
+		  lblLevel = new JLabel("1"); lblLevel.setForeground(Color.YELLOW);
+		  lblLevel.setFont(new Font("Tahoma", Font.BOLD, 30)); lblLevel.setBounds(672,
+		  22, 48, 30); getContentPane().add(lblLevel);
+		  getContentPane().setComponentZOrder(lblLevel, 0);
+		  
+		  lblStatus = new JLabel("Status"); lblStatus.setForeground(Color.WHITE);
+		  lblStatus.setFont(new Font("Tahoma", Font.BOLD, 30)); lblStatus.setBounds(0,
+		  SCREEN_HEIGHT - 30 - 16, SCREEN_WIDTH, 36); getContentPane().add(lblStatus);
+		  getContentPane().setComponentZOrder(lblStatus, 0);
+		 
 
 	}
 
@@ -204,6 +197,11 @@ public class AnimationFrame extends JFrame {
 				//REFRESH
 				this.repaint();
 			}
+			
+			if (universe.getFailure() == true) {
+				((GameAnimation) animation).setUniverseCount(0);
+				animation.setRetry(animation.getRetry() + 1);
+			}
 
 			universe = animation.getNextUniverse();
 
@@ -216,8 +214,8 @@ public class AnimationFrame extends JFrame {
 	}
 
 	private void updateControls() {
-		this.lblTime.setText(Long.toString(elapsed_time));
-		this.lblLevel.setText(Integer.toString(universeLevel));
+		this.lblTime.setText(Integer.toString(universe.getCarSpeed()));
+		this.lblLevel.setText(String.format("%d", animation.getRetry()));
 		if (universe != null) {
 			this.lblStatus.setText(universe.toString());
 		}
