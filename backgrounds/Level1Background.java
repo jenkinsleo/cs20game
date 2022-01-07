@@ -22,6 +22,8 @@ public class Level1Background implements Background{
     private int barrierNum = 3;
     private int turnNum = 9;
     
+    private int finish = 0;
+    
     private int maxCols = 0;
     private int maxRows = 0;
     
@@ -29,19 +31,15 @@ public class Level1Background implements Background{
     private int startRow = 6;
     
     
-    int[][] map = new int[][] {
-    	{2,2,2,2,2,2,2},
-    	{2,2,2,3,3,3,3},
-    	{2,2,3,9,1,1,1},
-    	{2,2,3,1,3,2,2},
-    	{2,2,3,1,3,2,2},
-    	{2,2,3,1,3,2,2},
-    	{2,2,3,1,3,2,2}
-    };
+    int[][] map;
     
-    public Level1Background() {
+    public Level1Background(int[][] map) {
+    	this.map = map;
+    	
     	this.maxRows = map.length - 1;
     	this.maxCols = map[0].length - 1;
+    	
+    	
     	
     	
     	try {
@@ -65,6 +63,9 @@ public class Level1Background implements Background{
 			image = null;
 		}
 		else if (map[row][col] == roadNum) {
+			image = road;
+		}
+		else if (map[row][col] == finish) {
 			image = road;
 		}
 		else if (map[row][col] == grassNum) {
@@ -125,19 +126,16 @@ public class Level1Background implements Background{
 		}
 	}
 	
-	public int getStartCol() {
-		return this.startCol;
-	}
-	public int getStartRow() {
-		return this.startRow;
-	}
+	
 	
 	public ArrayList<DisplayableSprite> getBarriers() {
 		ArrayList<DisplayableSprite> barriers = new ArrayList<DisplayableSprite>();
 		for (int col = 0; col < map[0].length; col++) {
 			for (int row = 0; row < map.length; row++) {
 				if (map[row][col] == barrierNum) {
-					barriers.add(new BarrierSprite((col * TILE_WIDTH) + 20, (row * TILE_HEIGHT) + 20, ((col + 1) * TILE_WIDTH) - 20, ((row + 1) * TILE_HEIGHT) - 20, true));
+					barriers.add(new BarrierSprite((col * TILE_WIDTH) + 30, (row * TILE_HEIGHT) + 30, ((col + 1) * TILE_WIDTH) - 30, ((row + 1) * TILE_HEIGHT) - 30, false));
+				} else if (map[row][col] == finish) {
+					barriers.add(new ExitSprite((col * TILE_WIDTH) + 30, (row * TILE_HEIGHT) + 30, ((col + 1) * TILE_WIDTH) - 30, ((row + 1) * TILE_HEIGHT) - 30, true));
 				} 
 			}
 		}

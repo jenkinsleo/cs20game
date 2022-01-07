@@ -199,8 +199,11 @@ public class AnimationFrame extends JFrame {
 			}
 			
 			if (universe.getFailure() == true) {
-				((GameAnimation) animation).setUniverseCount(0);
+				int count = ((GameAnimation) animation).getUniverseCount();
+				GameAnimation.setUniverseCount(count - 1);
 				animation.setRetry(animation.getRetry() + 1);
+			} else if (universe.getMenu() == true) {
+				GameAnimation.setUniverseCount(0);
 			}
 
 			universe = animation.getNextUniverse();

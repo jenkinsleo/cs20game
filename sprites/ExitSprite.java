@@ -12,27 +12,19 @@ public class ExitSprite implements DisplayableSprite {
 	private double centerY = 0;
 	private double width = 50;
 	private double height = 50;
-	private boolean dispose = false;	
-	
-	private double currentAngle = 90;
-	private double ROTATION_SPEED = -180;	//degrees per second
-	private final static int FRAMES = 360;
-	private static Image[] rotatedImages = new Image[FRAMES];
-	private static boolean framesLoaded = false;
+	private boolean dispose = false;
 	
 	public ExitSprite(double minX, double minY, double maxX, double maxY, boolean visible) {
 		
-		if (framesLoaded == false) {
+		if (image == null) {
 			try {
-				image = ImageIO.read(new File("res/spiral-small.png"));
+				image = ImageIO.read(new File("res/finish.png"));
 			}
 			catch (IOException e) {
 				e.printStackTrace();
 			}
 			
-			for (int i = 0; i < FRAMES; i++) {
-				rotatedImages[i] = ImageRotator.rotate(image, i);
-			}
+			
 			
 		}
 		
@@ -46,7 +38,7 @@ public class ExitSprite implements DisplayableSprite {
 	
 
 	public Image getImage() {
-		return rotatedImages[(int)currentAngle];
+		return image;
 	}
 	
 	public void setVisible(boolean visible) {
@@ -97,19 +89,7 @@ public class ExitSprite implements DisplayableSprite {
 	}
 
 	public void update(Universe universe, KeyboardInput keyboard, long actual_delta_time) {
-		currentAngle -= (ROTATION_SPEED * (actual_delta_time * 0.001));
-	    if (currentAngle >= 360) {
-	    	currentAngle -= 360;
-	    }
-	    if (currentAngle < 0) {
-	    	currentAngle += 360;
-	    }
-	    
-	    int frame = (int)currentAngle;
-	    if (rotatedImages[frame] != null) {
-		    this.height = rotatedImages[frame].getHeight(null);
-		    this.width = rotatedImages[frame].getWidth(null);
-	    }
+		
 			
 	}
 

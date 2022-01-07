@@ -11,16 +11,19 @@ public class LevelUniverse implements Universe {
 	private double yCenter = 0;
 	private boolean failure = false;
 	private int retry = 0;
+	private int level;
+	
+	private boolean menu = false;
 
-	public LevelUniverse () {
+	public LevelUniverse (int[][] map, int level, int startRow, int startCol) {
+		this.level = level;
 
-		background = new Level1Background();
+		background = new Level1Background(map);
 		ArrayList<DisplayableSprite> barriers = ((Level1Background)background).getBarriers();
 		
 		((Level1Background) background).getBarriers();
 		
-		int startCol = ((Level1Background) background).getStartCol();
-		int startRow = ((Level1Background) background).getStartRow();
+		
 		
 		
 		player1 = new CarSprite(Level1Background.TILE_HEIGHT * (startCol + 0.5), Level1Background.TILE_WIDTH * (startRow + 0.5));
@@ -83,14 +86,25 @@ public class LevelUniverse implements Universe {
 		return this.failure;
 	}
 	
+	public boolean getMenu() {
+		return this.menu;
+	}
+	
 	public void update(KeyboardInput keyboard, long actual_delta_time) {
+		complete = ((CarSprite) player1).getComplete();
 		
-		if (keyboard.keyDownOnce(27) || ((CarSprite) player1).fail()) {
+		if (((CarSprite) player1).fail()) {
 			complete = true;
 			failure = true;
 			retry ++;
 			
+		} if (keyboard.keyDownOnce(27)) {
+			complete = true;
+			menu = true;
 		}
+		
+		
+		
 		
 		for (int i = 0; i < sprites.size(); i++) {
 			DisplayableSprite sprite = sprites.get(i);
@@ -104,7 +118,12 @@ public class LevelUniverse implements Universe {
 	}
 
 	public String toString() {
-		return "Leo's game";
+		if (level == 0) {
+			return "Menu";
+		} else {
+			return String.format("Level: %d", this.level);
+		}
+		
 	}
 
 	
@@ -113,7 +132,7 @@ public class LevelUniverse implements Universe {
 	public int getCarSpeed() {
 		// TODO Auto-generated method stub
 		
-		return (int) (((CarSprite)player1).getSpeed() * -1) / 100;
+		return (int) ((CarSprite)player1).getSpeed();
 		
 	}	
 

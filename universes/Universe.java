@@ -33,6 +33,9 @@ public interface Universe {
 
 	public int getRetry();
 	public int getCarSpeed();
+
+
+	public boolean getMenu();
     
 	
 }
