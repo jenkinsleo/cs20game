@@ -37,5 +37,5 @@ public interface Universe {
 
 	public boolean getMenu();
     
-	
+	public long getScore();
 }

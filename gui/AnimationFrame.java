@@ -17,6 +17,8 @@ public class AnimationFrame extends JFrame {
 
 	private int xpCenter = SCREEN_WIDTH / 2;
 	private int ypCenter = SCREEN_HEIGHT / 2;
+	private AudioPlayer ha = new AudioPlayer();
+	private AudioPlayer letsgo = new AudioPlayer();
 
 	private double scale = 1;
 	//point in universe on which the screen will center
@@ -29,7 +31,9 @@ public class AnimationFrame extends JFrame {
 	private JLabel lblTime;
 	private JLabel lblLevelLabel;
 	private JLabel lblLevel;
-	private JLabel lblStatus;;
+	private JLabel lblStatus;
+	private JLabel lblScoreLabel;
+	private JLabel lblScore;
 
 	private static boolean stop = false;
 
@@ -103,31 +107,44 @@ public class AnimationFrame extends JFrame {
 
 		
 		  lblTimeLabel = new JLabel("Speed: ");
-		  lblTimeLabel.setForeground(Color.YELLOW); lblTimeLabel.setFont(new
-		  Font("Tahoma", Font.BOLD, 30)); lblTimeLabel.setBounds(80, 22, 96, 30);
+		  lblTimeLabel.setForeground(Color.WHITE); lblTimeLabel.setFont(new
+		  Font("Tahoma", Font.BOLD, 30)); lblTimeLabel.setBounds(SCREEN_WIDTH - 180, SCREEN_HEIGHT - 50, 150, 30);
 		  getContentPane().add(lblTimeLabel);
 		  getContentPane().setComponentZOrder(lblTimeLabel, 0);
 		  
-		  lblTime = new JLabel("000"); lblTime.setForeground(Color.YELLOW);
-		  lblTime.setFont(new Font("Tahoma", Font.BOLD, 30)); lblTime.setBounds(192,
-		  22, 320, 30); getContentPane().add(lblTime);
+		  lblTime = new JLabel("000"); lblTime.setForeground(Color.WHITE);
+		  lblTime.setFont(new Font("Tahoma", Font.BOLD, 30)); lblTime.setBounds(SCREEN_WIDTH - 48,SCREEN_HEIGHT - 50, 320, 30);
+		  getContentPane().add(lblTime);
 		  getContentPane().setComponentZOrder(lblTime, 0);
 		  
 		  lblLevelLabel = new JLabel("Retries: ");
-		  lblLevelLabel.setForeground(Color.YELLOW); lblLevelLabel.setFont(new
-		  Font("Tahoma", Font.BOLD, 30)); lblLevelLabel.setBounds(528, 22, 128, 30);
+		  lblLevelLabel.setForeground(Color.WHITE); lblLevelLabel.setFont(new Font("Tahoma", Font.BOLD, 30)); 
+		  lblLevelLabel.setBounds(SCREEN_WIDTH - 200,22, 128, 30);
 		  getContentPane().add(lblLevelLabel);
 		  getContentPane().setComponentZOrder(lblLevelLabel, 0);
 		  
-		  lblLevel = new JLabel("1"); lblLevel.setForeground(Color.YELLOW);
-		  lblLevel.setFont(new Font("Tahoma", Font.BOLD, 30)); lblLevel.setBounds(672,
-		  22, 48, 30); getContentPane().add(lblLevel);
+		  lblLevel = new JLabel("1"); lblLevel.setForeground(Color.WHITE);
+		  lblLevel.setFont(new Font("Tahoma", Font.BOLD, 30)); lblLevel.setBounds(SCREEN_WIDTH - 48 ,22, 48, 30);
+		  getContentPane().add(lblLevel);
 		  getContentPane().setComponentZOrder(lblLevel, 0);
 		  
 		  lblStatus = new JLabel("Status"); lblStatus.setForeground(Color.WHITE);
 		  lblStatus.setFont(new Font("Tahoma", Font.BOLD, 30)); lblStatus.setBounds(0,
 		  SCREEN_HEIGHT - 30 - 16, SCREEN_WIDTH, 36); getContentPane().add(lblStatus);
 		  getContentPane().setComponentZOrder(lblStatus, 0);
+		  
+		  lblScoreLabel = new JLabel("Score: ");
+		  lblScoreLabel.setForeground(Color.WHITE); lblScoreLabel.setFont(new
+		  Font("Tahoma", Font.BOLD, 30)); lblScoreLabel.setBounds(SCREEN_WIDTH - 200, 60, 150, 30);
+		  getContentPane().add(lblScoreLabel);
+		  getContentPane().setComponentZOrder(lblScoreLabel, 0);
+		  
+		  lblScore = new JLabel("0000");
+		  lblScore.setForeground(Color.WHITE); lblScore.setFont(new
+		  Font("Tahoma", Font.BOLD, 30)); lblScore.setBounds(SCREEN_WIDTH - 100, 60, 150, 30);
+		  getContentPane().add(lblScore);
+		  getContentPane().setComponentZOrder(lblScore, 0);
+		  
 		 
 
 	}
@@ -218,11 +235,18 @@ public class AnimationFrame extends JFrame {
 
 	private void updateControls() {
 		this.lblTime.setText(Integer.toString(universe.getCarSpeed()));
+		if (universe.getCarSpeed() >= CarSprite.TOPSPEED) {
+			lblTime.setForeground(Color.RED);
+		} else if (universe.getCarSpeed() > CarSprite.TOPSPEED - 5) {
+			lblTime.setForeground(Color.YELLOW);
+		} else {
+			lblTime.setForeground(Color.GREEN);
+		}
 		this.lblLevel.setText(String.format("%d", animation.getRetry()));
 		if (universe != null) {
 			this.lblStatus.setText(universe.toString());
 		}
-
+		this.lblScore.setText(String.format("%04d", GameAnimation.getScore()));
 	}
 
 	private void updateTime() {

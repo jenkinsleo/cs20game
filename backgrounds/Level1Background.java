@@ -1,10 +1,13 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+
 
 
 public class Level1Background implements Background{
@@ -15,7 +18,9 @@ public class Level1Background implements Background{
     private Image grass;
     private Image barrier;
     private Image turn;
+    private Image barrierturn;
     
+    private HashMap<Integer, Image> mapDict = new HashMap<Integer, Image>();
     
     private int roadNum = 1;
     private int grassNum = 2;
@@ -47,37 +52,54 @@ public class Level1Background implements Background{
 			this.grass = ImageIO.read(new File("res/tiles/green.png"));
 			this.barrier = ImageIO.read(new File("res/tiles/barrier.png"));
 			this.turn = ImageIO.read(new File("res/tiles/turn.png"));
+			this.barrierturn = ImageIO.read(new File("res/tiles/barrier_turn.png"));
 		} catch (IOException e) {
 			
 			e.printStackTrace();
 		}
-    	
-    	
+    	System.out.println(Arrays.deepToString(map));
+    	try {
+    		
+    		
+    		mapDict.put(0, road);
+    		mapDict.put(1, road);
+    		mapDict.put(2, ImageRotator.rotate(ImageRotator.rotate(road, 270), 180));
+    		mapDict.put(3, ImageRotator.rotate(ImageRotator.rotate(road, 270), 180));
+    		mapDict.put(-1, grass);
+    		mapDict.put(4, barrier);
+    		mapDict.put(5, ImageRotator.rotate(ImageRotator.rotate(barrier, 270), 180));
+    		mapDict.put(6, ImageRotator.rotate(barrier, 180));
+    		mapDict.put(7, ImageRotator.rotate(barrier, 270));
+    		mapDict.put(8, barrierturn);
+    		mapDict.put(9, ImageRotator.rotate(ImageRotator.rotate(barrierturn, 270), 180));
+    		mapDict.put(10, ImageRotator.rotate(barrierturn, 180));
+    		mapDict.put(11, ImageRotator.rotate(barrierturn, 270));
+    		mapDict.put(12, turn);
+    		mapDict.put(13, ImageRotator.rotate(ImageRotator.rotate(turn, 270), 180));
+    		mapDict.put(14, ImageRotator.rotate(turn, 180));
+    		mapDict.put(15, ImageRotator.rotate(turn, 270));
+    		
+    		mapDict.put(16, road);
+    		mapDict.put(17, road);
+    		mapDict.put(18, ImageRotator.rotate(ImageRotator.rotate(road, 270), 180));
+    		mapDict.put(19, ImageRotator.rotate(ImageRotator.rotate(road, 270), 180));
+    		
+    		
+    		
+    		
+    		
+    	} catch (Exception e) {
+    		//do nothing
+    	}
     }
 
 	@Override
 	public Tile getTile(int col, int row) {
 		Image image = null;
 		
-		if (row < 0 || row > maxRows || col < 0 || col > maxCols) {
-			image = null;
-		}
-		else if (map[row][col] == roadNum) {
-			image = road;
-		}
-		else if (map[row][col] == finish) {
-			image = road;
-		}
-		else if (map[row][col] == grassNum) {
-			image = grass;
-		}
-		else if (map[row][col] == barrierNum) {
-			image = barrier;
-		}
-		else if (map[row][col] == turnNum) {
-			image = turn;
-		}
-		else {
+		try {
+			image = mapDict.get(map[row][col]);
+		} catch (Exception e) {
 			image = null;
 		}
 			
@@ -130,13 +152,21 @@ public class Level1Background implements Background{
 	
 	public ArrayList<DisplayableSprite> getBarriers() {
 		ArrayList<DisplayableSprite> barriers = new ArrayList<DisplayableSprite>();
-		for (int col = 0; col < map[0].length; col++) {
-			for (int row = 0; row < map.length; row++) {
-				if (map[row][col] == barrierNum) {
-					barriers.add(new BarrierSprite((col * TILE_WIDTH) + 30, (row * TILE_HEIGHT) + 30, ((col + 1) * TILE_WIDTH) - 30, ((row + 1) * TILE_HEIGHT) - 30, false));
-				} else if (map[row][col] == finish) {
-					barriers.add(new ExitSprite((col * TILE_WIDTH) + 30, (row * TILE_HEIGHT) + 30, ((col + 1) * TILE_WIDTH) - 30, ((row + 1) * TILE_HEIGHT) - 30, true));
-				} 
+		System.out.println(this.maxRows);
+		System.out.println(this.maxCols);
+		for (int row = 0; row < map.length; row++) {
+			for (int col = 0; col < map[0].length; col++) {
+				try {
+					System.out.println(map[row][col]);
+					if (map[row][col] >= 4 && map[row][col] <= 11) {
+						barriers.add(new BarrierSprite((col * TILE_WIDTH) + 30, (row * TILE_HEIGHT) + 30, ((col + 1) * TILE_WIDTH) - 30, ((row + 1) * TILE_HEIGHT) - 30, false));
+					} else if (map[row][col]  >= 16 && map[row][col] <= 19) {
+						barriers.add(new ExitSprite((col * TILE_WIDTH) + 30, (row * TILE_HEIGHT) + 30, ((col + 1) * TILE_WIDTH) - 30, ((row + 1) * TILE_HEIGHT) - 30, true));
+					}
+				} catch (Exception e) {
+					//e.printStackTrace();
+				}
+				 
 			}
 		}
 		return barriers;

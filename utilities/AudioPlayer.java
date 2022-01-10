@@ -24,7 +24,7 @@ public class AudioPlayer implements LineListener {
 	public static boolean stopAll = false;
 
 	Thread audioThread = null;
-	private boolean playCompleted = true;
+	public boolean playCompleted = true;
 	private boolean stop = false; 
 
 	public boolean isPlayCompleted() {

@@ -13,13 +13,13 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	private Image rotatedImage;
 	private static Image[] rotatedImages = new Image[360];
 	
-	private double ACCELERATION = 600;
+	private double ACCELERATION = 900;
 	private double ROTATION_SPEED = 15;
-	private double TOPSPEED = 20;
+	public static double TOPSPEED = 30;
 	private double currentAngle = 90;
 	
-	private double lastAngle = 0;
-	private double newAngle = 0;
+	private double lastAngle = 90;
+	private double newAngle = 90;
 	
 	
 	private double centerX = 0;
@@ -38,6 +38,14 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	
 	
 	
+	private int driftMsg = 0;
+	
+	private long firstTime;
+	
+	private boolean currentlyDrifting = false;
+	private int notDriftSpeed = 0;
+	
+	
 	private long score = 0;
 	
 	public CarSprite(double centerX, double centerY) {
@@ -47,14 +55,18 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 		lastAngle = currentAngle;
 		
 		if (image == null) {
-			try {
-				image = ImageIO.read(new File("res/tiles/car3.png"));
-				brake = ImageIO.read(new File("res/tiles/car2.png"));
+			
+				try {
+					image = ImageIO.read(new File(GameAnimation.getCurrentCar()));
+					brake = ImageIO.read(new File(GameAnimation.getBCar()));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
-			}
-			catch (IOException e) {
-				System.out.println(e.toString());
-			}
+				
+			
+			
 			
 			
 			
@@ -150,7 +162,9 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	public boolean getComplete() {
 		return complete;
 	}
-	
+	public long returnScore() {
+		return score;
+	}
 	@Override
 	public void update(Universe universe, KeyboardInput keyboard, long actual_delta_time) {
 		boolean accel = false;
@@ -164,6 +178,7 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 		}
 		//UP
 		if (keyboard.keyDown(38)) {
+			this.currentlyDrifting = false;
 			accel = true;
 			if(this.getSpeed() < this.TOPSPEED) {
 				forwardSpeed -= ACCELERATION * (actual_delta_time * 0.001);
@@ -182,6 +197,7 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 		
 		// DOWN
 		if (keyboard.keyDown(40)) {
+			this.currentlyDrifting = false;
 			accel = true;
 			forwardSpeed += (ACCELERATION * 2) * (actual_delta_time * 0.001);
 			image = brake;
@@ -213,9 +229,9 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 			int change;
 			
 			if (this.getSpeed() < TOPSPEED -5) {
-				change = 10;
+				change = 11;
 			} else {
-				change = 5;
+				change = 8;
 			}
 			if (getAngleChange() > 15) {
 				lastAngle %= 360;
@@ -253,7 +269,7 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 		testCollision(universe, movement_x, movement_y);
 		isAtExit(universe, movement_x, movement_y);
 		makeScore(actual_delta_time);
-		System.out.println(getActualChange());
+		
 	}
 	public double getSpeed() {
 		// TODO Auto-generated method stub
@@ -269,8 +285,9 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 						this.getMaxX()  + deltaX, this.getMaxY() + deltaY, 
 						sprite.getMinX(),sprite.getMinY(), 
 						sprite.getMaxX(), sprite.getMaxY())) {
-					System.out.println("fail");
-					//adds score and dispose coin
+					
+					
+					
 					fail = true;
 					break;					
 				}
@@ -289,6 +306,9 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 						sprite.getMaxX(), sprite.getMaxY())) {
 					System.out.println("fail");
 					//adds score and dispose coin
+					
+					//plays sound
+					
 					complete = true;
 					break;					
 				}
@@ -296,6 +316,8 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 		}		
 	}
 	private double getAngleChange() {
+		
+
 		double a = currentAngle - lastAngle;
 		a = (a + 180) % 360 - 180;
 		
@@ -310,21 +332,47 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	}
 	private void makeScore(long actual_delta_time) {
 		//adds bit of score for every amount of time over halfway of max speed
+		long newScore = 0;
 		
 		if (this.getSpeed() == TOPSPEED) {
-			this.score += actual_delta_time * 0.03;
+			newScore += actual_delta_time * 0.06;
 			
 		} else if(this.getSpeed() > TOPSPEED - 5) {
-			this.score += actual_delta_time * 0.02;
+			newScore += actual_delta_time * 0.02;
 		} else if(this.getSpeed() > TOPSPEED / 2) {
-			this.score += actual_delta_time * 0.01;
+			newScore += actual_delta_time * 0.01;
 		}
 		
-		double a = getAngleChange();
+		double actualChange = getActualChange();
+		if (currentlyDrifting == false) {
+			notDriftSpeed = (int) this.getSpeed();
+		} else if(this.getSpeed() < notDriftSpeed - 5) {
+			actualChange = 0;
+		}
+		
+		
+		if (actualChange > 90 || actualChange * -1 > 90 ) {
+			currentlyDrifting = true;
+			newScore += actual_delta_time * 0.2;
+			this.driftMsg = 2;
+		} else if (actualChange > 45 || actualChange * -1 > 45) {
+			currentlyDrifting = true;
+			newScore += actual_delta_time * 0.1;
+			this.driftMsg = 1;
+		} else {
+			
+			this.driftMsg = 0;
+		}
+		
+		
+		GameAnimation.addScore(newScore);
 		
 		
 		
-		
+	}
+	
+	public int driftType() {
+		return this.driftMsg;
 	}
 
 }

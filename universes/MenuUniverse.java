@@ -24,10 +24,16 @@ public class MenuUniverse implements Universe {
 	private Image quit1;
 	private Image quit2;
 	
+	
+	
 	private ButtonSprite play;
 	private ButtonSprite tutorial;
 	private ButtonSprite quit;
 	
+	private UselessSprite littleCar;
+	private UselessSprite arrows;
+	
+	private AudioPlayer music;
 	private double lastTime = 0;
 	
 	private int activeNum = 1;
@@ -35,6 +41,7 @@ public class MenuUniverse implements Universe {
 	public MenuUniverse () {
 		
 		try {
+			
 			play1 = ImageIO.read(new File("res/buttons/play1.png"));
 			play2 = ImageIO.read(new File("res/buttons/play2.png"));
 			tutorial1 = ImageIO.read(new File("res/buttons/tutorial1.png"));
@@ -49,18 +56,23 @@ public class MenuUniverse implements Universe {
 			System.out.println(e);
 		}
 		
-	
+		littleCar = new UselessSprite(Level1Background.TILE_WIDTH * (4), Level1Background.TILE_HEIGHT * (4));
+		sprites.add(littleCar);
+		
+		arrows = new UselessSprite(Level1Background.TILE_WIDTH * (4), Level1Background.TILE_HEIGHT * (4), false, "res/buttons/arrows.png", 150, 110);
+		sprites.add(arrows);
+		
 		player1 = new MenuSprite(Level1Background.TILE_WIDTH * (startCol + 0.5), Level1Background.TILE_HEIGHT * (startRow + 1.25));
 		sprites.add(player1);
 		
 		
-		play = new ButtonSprite(Level1Background.TILE_WIDTH * (4), Level1Background.TILE_HEIGHT * (1.5), play1, play2);
+		play = new ButtonSprite(Level1Background.TILE_WIDTH * (4), Level1Background.TILE_HEIGHT * (1.25), play1, play2);
 		sprites.add(play);
 		
-		tutorial = new ButtonSprite(Level1Background.TILE_WIDTH * (4), Level1Background.TILE_HEIGHT * (2.5), tutorial1, tutorial2);
+		tutorial = new ButtonSprite(Level1Background.TILE_WIDTH * (4), Level1Background.TILE_HEIGHT * (2.25), tutorial1, tutorial2);
 		sprites.add(tutorial);
 		
-		quit = new ButtonSprite(Level1Background.TILE_WIDTH * (4), Level1Background.TILE_HEIGHT * (3.5), quit1, quit2);
+		quit = new ButtonSprite(Level1Background.TILE_WIDTH * (4), Level1Background.TILE_HEIGHT * (3.25), quit1, quit2);
 		sprites.add(quit);
 		
 		play.setActive(true);
@@ -68,13 +80,8 @@ public class MenuUniverse implements Universe {
 		quit.setActive(true);
 		
 		
-		this.background = new Level1Background(new int[][] {
-			{2,1,2,2,2,2},
-			{2,1,2,2,2,2},
-			{2,1,2,2,2,2},
-			{2,1,2,2,2,2},
-			{2,1,2,2,2,2}
-		});
+		
+		this.background = new Level1Background(CSVReader.importFromCSV("res/maps/menumap.csv"));
 	
 	}
 	
@@ -123,11 +130,21 @@ public class MenuUniverse implements Universe {
 	}		
 	
 	public void update(KeyboardInput keyboard, long actual_delta_time) {
-
+		GameAnimation.playCurrent();
 		if (keyboard.keyDownOnce(27)) {
 			
 			//System.out.println("complete");
 			complete = true;
+		}
+		//left
+		if (keyboard.keyDown(37) && System.currentTimeMillis() - lastTime > 100) {
+			lastTime = System.currentTimeMillis();
+			GameAnimation.changeCar(0);
+		} 
+		//right
+		if (keyboard.keyDown(39) && System.currentTimeMillis() - lastTime > 100) {
+			lastTime = System.currentTimeMillis();
+			GameAnimation.changeCar(0);
 		}
 		
 		//up
@@ -210,6 +227,12 @@ public class MenuUniverse implements Universe {
 	public boolean getMenu() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public long getScore() {
+		// TODO Auto-generated method stub
+		return 0;
 	}	
 
 }

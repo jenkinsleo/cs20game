@@ -18,6 +18,7 @@ public class MenuSprite implements MovableSprite, DisplayableSprite{
 	
 	private double maxChangeY = 1000;
 	private double maxChangeX = 0;
+	private String lastCar;
 	
 	private Image image;
 	
@@ -27,12 +28,12 @@ public class MenuSprite implements MovableSprite, DisplayableSprite{
 		
 		if (image == null) {
 			try {
-				image = ImageIO.read(new File("res/tiles/car3.png"));
-				
+				image = ImageIO.read(new File(GameAnimation.getCurrentCar()));
+				lastCar = GameAnimation.getCurrentCar();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			catch (IOException e) {
-				System.out.println(e.toString());
-			} 
 		}
 		
 		this.initPosX = centerX;
@@ -89,6 +90,17 @@ public class MenuSprite implements MovableSprite, DisplayableSprite{
 
 	@Override
 	public void update(Universe universe, KeyboardInput keyboard, long actual_delta_time) {
+		
+		if (lastCar != GameAnimation.getCurrentCar()) {
+			try {
+				image = ImageIO.read(new File(GameAnimation.getCurrentCar()));
+				lastCar = GameAnimation.getCurrentCar();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		double movement_y = (this.xSpeed * actual_delta_time * 0.001);
 		double movement_x = (this.ySpeed * actual_delta_time * 0.001);
 		this.centerX += movement_x;
