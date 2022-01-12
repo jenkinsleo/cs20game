@@ -15,7 +15,7 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	
 	private double ACCELERATION = 900;
 	private double ROTATION_SPEED = 15;
-	public static double TOPSPEED = 30;
+	public static double TOPSPEED = 20;
 	private double currentAngle = 90;
 	
 	private double lastAngle = 90;

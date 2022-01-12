@@ -66,13 +66,13 @@ public class MenuUniverse implements Universe {
 		sprites.add(player1);
 		
 		
-		play = new ButtonSprite(Level1Background.TILE_WIDTH * (4), Level1Background.TILE_HEIGHT * (1.25), play1, play2);
+		play = new ButtonSprite(200 * (4), 200 * (1.25), play1, play2);
 		sprites.add(play);
 		
-		tutorial = new ButtonSprite(Level1Background.TILE_WIDTH * (4), Level1Background.TILE_HEIGHT * (2.25), tutorial1, tutorial2);
+		tutorial = new ButtonSprite(200 * (4), 200 * (2.25), tutorial1, tutorial2);
 		sprites.add(tutorial);
 		
-		quit = new ButtonSprite(Level1Background.TILE_WIDTH * (4), Level1Background.TILE_HEIGHT * (3.25), quit1, quit2);
+		quit = new ButtonSprite(200 * (4), 200 * (3.25), quit1, quit2);
 		sprites.add(quit);
 		
 		play.setActive(true);

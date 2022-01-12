@@ -9,7 +9,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 
+
 public class AnimationFrame extends JFrame {
+	
+	
 
 	final public static int FRAMES_PER_SECOND = 60;
 	final public static int SCREEN_HEIGHT = 750;
@@ -17,8 +20,7 @@ public class AnimationFrame extends JFrame {
 
 	private int xpCenter = SCREEN_WIDTH / 2;
 	private int ypCenter = SCREEN_HEIGHT / 2;
-	private AudioPlayer ha = new AudioPlayer();
-	private AudioPlayer letsgo = new AudioPlayer();
+	
 
 	private double scale = 1;
 	//point in universe on which the screen will center
@@ -213,6 +215,9 @@ public class AnimationFrame extends JFrame {
 
 				//REFRESH
 				this.repaint();
+				
+				
+				
 			}
 			
 			if (universe.getFailure() == true) {
@@ -222,6 +227,7 @@ public class AnimationFrame extends JFrame {
 			} else if (universe.getMenu() == true) {
 				GameAnimation.setUniverseCount(0);
 			}
+			
 
 			universe = animation.getNextUniverse();
 

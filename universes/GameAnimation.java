@@ -17,10 +17,7 @@ public class GameAnimation implements Animation {
 	private static String car1song = "res/sounds/tokyodrift.wav";
 	private static String car2song = "res/sounds/roof.wav";
 	
-	private static AudioPlayer ha = new AudioPlayer();
-	private AudioPlayer letsgo = new AudioPlayer();
 	
-	private boolean haCondition = false;
 	
 	private static int currentCar = 1;
 	private static int maxCars = 2;
@@ -114,7 +111,7 @@ public class GameAnimation implements Animation {
 		} else if(universeCount == 3) {
 			AudioPlayer.setStopAll(true);
 			//tutorial 
-			return new LevelUniverse("res/maps/tutorial.csv", 0, 3,8);
+			return new LevelUniverse("res/maps/tutorial.csv", 0, 8,3);
 		} else if(universeCount == 4) {
 			//level 1
 			AudioPlayer.setStopAll(true);
@@ -156,8 +153,7 @@ public class GameAnimation implements Animation {
 		
 	}
 	public static void resetScore() {
-		ha.setStop(false);
-		ha.playAsynchronous("res/sounds/ha.wav");
+		
 		GameAnimation.score = 0;
 	}
 	public static void addScore(long score) {

@@ -11,8 +11,8 @@ import java.util.HashMap;
 
 
 public class Level1Background implements Background{
-	protected static int TILE_WIDTH = 200;
-    protected static int TILE_HEIGHT = 200;
+	protected static int TILE_WIDTH = 300;
+    protected static int TILE_HEIGHT = 300;
     
     private Image road;
     private Image grass;
