@@ -33,7 +33,7 @@ public class MenuUniverse implements Universe {
 	private UselessSprite littleCar;
 	private UselessSprite arrows;
 	
-	private AudioPlayer music;
+	private int timeChange = 150;
 	private double lastTime = 0;
 	
 	private int activeNum = 1;
@@ -56,13 +56,13 @@ public class MenuUniverse implements Universe {
 			System.out.println(e);
 		}
 		
-		littleCar = new UselessSprite(Level1Background.TILE_WIDTH * (4), Level1Background.TILE_HEIGHT * (4));
+		littleCar = new UselessSprite(200 * (4), 200 * (4));
 		sprites.add(littleCar);
 		
-		arrows = new UselessSprite(Level1Background.TILE_WIDTH * (4), Level1Background.TILE_HEIGHT * (4), false, "res/buttons/arrows.png", 150, 110);
+		arrows = new UselessSprite(200 * (4), 200 * (4), false, "res/buttons/arrows.png", 150, 110);
 		sprites.add(arrows);
 		
-		player1 = new MenuSprite(Level1Background.TILE_WIDTH * (startCol + 0.5), Level1Background.TILE_HEIGHT * (startRow + 1.25));
+		player1 = new MenuSprite(225 * (startCol + 0.5), 200 * (startRow + 1.25));
 		sprites.add(player1);
 		
 		
@@ -137,23 +137,23 @@ public class MenuUniverse implements Universe {
 			complete = true;
 		}
 		//left
-		if (keyboard.keyDown(37) && System.currentTimeMillis() - lastTime > 100) {
+		if (keyboard.keyDown(37) && System.currentTimeMillis() - lastTime > timeChange) {
 			lastTime = System.currentTimeMillis();
 			GameAnimation.changeCar(0);
 		} 
 		//right
-		if (keyboard.keyDown(39) && System.currentTimeMillis() - lastTime > 100) {
+		if (keyboard.keyDown(39) && System.currentTimeMillis() - lastTime > timeChange) {
 			lastTime = System.currentTimeMillis();
 			GameAnimation.changeCar(0);
 		}
 		
 		//up
-		if (keyboard.keyDown(38) && System.currentTimeMillis() - lastTime > 100) {
+		if (keyboard.keyDown(38) && System.currentTimeMillis() - lastTime > timeChange) {
 			lastTime = System.currentTimeMillis();
 			activeNum -= 1;
 			}
 		//down
-		else if (keyboard.keyDown(40) && System.currentTimeMillis() - lastTime > 100) {
+		else if (keyboard.keyDown(40) && System.currentTimeMillis() - lastTime > timeChange) {
 			lastTime = System.currentTimeMillis();
 			activeNum += 1;
 			}

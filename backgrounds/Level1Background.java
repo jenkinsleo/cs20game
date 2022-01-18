@@ -11,8 +11,8 @@ import java.util.HashMap;
 
 
 public class Level1Background implements Background{
-	protected static int TILE_WIDTH = 300;
-    protected static int TILE_HEIGHT = 300;
+	protected static int TILE_WIDTH = 225;
+    protected static int TILE_HEIGHT = 225;
     
     private Image road;
     private Image grass;
@@ -157,11 +157,19 @@ public class Level1Background implements Background{
 		for (int row = 0; row < map.length; row++) {
 			for (int col = 0; col < map[0].length; col++) {
 				try {
-					System.out.println(map[row][col]);
+					//System.out.println(map[row][col]);
 					if (map[row][col] >= 4 && map[row][col] <= 11) {
 						barriers.add(new BarrierSprite((col * TILE_WIDTH) + 30, (row * TILE_HEIGHT) + 30, ((col + 1) * TILE_WIDTH) - 30, ((row + 1) * TILE_HEIGHT) - 30, false));
 					} else if (map[row][col]  >= 16 && map[row][col] <= 19) {
 						barriers.add(new ExitSprite((col * TILE_WIDTH) + 30, (row * TILE_HEIGHT) + 30, ((col + 1) * TILE_WIDTH) - 30, ((row + 1) * TILE_HEIGHT) - 30, true));
+					}
+					
+					if (map[row][col] == 1 || map[row][col] == 2) {
+						double rand = Math.random();
+						
+						if (rand < 0.05) {
+							System.out.println("yes");
+						}
 					}
 				} catch (Exception e) {
 					//e.printStackTrace();

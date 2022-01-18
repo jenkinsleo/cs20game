@@ -13,9 +13,9 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	private Image rotatedImage;
 	private static Image[] rotatedImages = new Image[360];
 	
-	private double ACCELERATION = 900;
+	private double ACCELERATION = 1000;
 	private double ROTATION_SPEED = 15;
-	public static double TOPSPEED = 20;
+	public static double TOPSPEED = 30;
 	private double currentAngle = 90;
 	
 	private double lastAngle = 90;
@@ -24,8 +24,8 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	
 	private double centerX = 0;
 	private double centerY = 0;
-	private double width = 110;
-	private double height = 110;
+	private double width = 95;
+	private double height = 95;
 	private boolean dispose = false;	
 
 	private final double VELOCITY = 200;
@@ -38,6 +38,8 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	
 	
 	
+	
+	
 	private int driftMsg = 0;
 	
 	private long firstTime;
@@ -47,6 +49,7 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	
 	
 	private long score = 0;
+	private String mcqueen = "res/tiles/mcqueencar.png";
 	
 	public CarSprite(double centerX, double centerY) {
 		this.centerX = centerX;
@@ -55,10 +58,19 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 		lastAngle = currentAngle;
 		
 		if (image == null) {
+				
 			
 				try {
 					image = ImageIO.read(new File(GameAnimation.getCurrentCar()));
 					brake = ImageIO.read(new File(GameAnimation.getBCar()));
+					
+					
+					
+					if (GameAnimation.getCurrentCar() == mcqueen) {
+						this.ACCELERATION *= 1.5;
+						this.TOPSPEED = 40;
+					}
+					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -188,7 +200,7 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 		} else {
 			if (forwardSpeed < 0) {
 				
-				forwardSpeed += (ACCELERATION * 0.6) * (actual_delta_time * 0.001);
+				forwardSpeed += (900 * 0.6) * (actual_delta_time * 0.001);
 			} else {
 				forwardSpeed = 0;
 			}
@@ -229,9 +241,9 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 			int change;
 			
 			if (this.getSpeed() < TOPSPEED -5) {
-				change = 11;
+				change = 15;
 			} else {
-				change = 8;
+				change = 11;
 			}
 			if (getAngleChange() > 15) {
 				lastAngle %= 360;
@@ -269,6 +281,9 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 		testCollision(universe, movement_x, movement_y);
 		isAtExit(universe, movement_x, movement_y);
 		makeScore(actual_delta_time);
+		
+		
+		
 		
 	}
 	public double getSpeed() {

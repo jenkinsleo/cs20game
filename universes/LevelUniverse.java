@@ -96,6 +96,8 @@ public class LevelUniverse implements Universe {
 	
 	
 	public void update(KeyboardInput keyboard, long actual_delta_time) {
+		
+		GameAnimation.playCurrent();
 		complete = ((CarSprite) player1).getComplete();
 		((DriftMsgSprite) driftMsg).setActive(((CarSprite) player1).driftType());
 		((DriftMsgSprite) driftMsg).setCenterX(player1.getCenterX());
