@@ -24,11 +24,16 @@ public class MenuUniverse implements Universe {
 	private Image quit1;
 	private Image quit2;
 	
+	private Image volume;
+	private Image mute;
+	
 	
 	
 	private ButtonSprite play;
 	private ButtonSprite tutorial;
 	private ButtonSprite quit;
+	
+	private ButtonSprite muteButton;
 	
 	private UselessSprite littleCar;
 	private UselessSprite arrows;
@@ -49,6 +54,10 @@ public class MenuUniverse implements Universe {
 			quit1 = ImageIO.read(new File("res/buttons/quit1.png"));
 			quit2 = ImageIO.read(new File("res/buttons/quit2.png"));
 			
+			volume = ImageIO.read(new File("res/buttons/volume.png"));
+			mute = ImageIO.read(new File("res/buttons/mute.png"));
+			
+			
 			
 			
 			
@@ -56,10 +65,10 @@ public class MenuUniverse implements Universe {
 			System.out.println(e);
 		}
 		
-		littleCar = new UselessSprite(200 * (4), 200 * (4));
+		littleCar = new UselessSprite(200 * (4.5), 200 * (4));
 		sprites.add(littleCar);
 		
-		arrows = new UselessSprite(200 * (4), 200 * (4), false, "res/buttons/arrows.png", 150, 110);
+		arrows = new UselessSprite(200 * (4.5), 200 * (4), false, "res/buttons/arrows.png", 150, 110);
 		sprites.add(arrows);
 		
 		player1 = new MenuSprite(225 * (startCol + 0.5), 200 * (startRow + 1.25));
@@ -74,6 +83,9 @@ public class MenuUniverse implements Universe {
 		
 		quit = new ButtonSprite(200 * (4), 200 * (3.25), quit1, quit2);
 		sprites.add(quit);
+		
+		muteButton = new ButtonSprite(200 * 3.5, 200 * 4, volume,mute, 130, 130);
+		sprites.add(muteButton);
 		
 		play.setActive(true);
 		tutorial.setActive(true);
@@ -182,6 +194,19 @@ public class MenuUniverse implements Universe {
 			tutorial.setActive(false);
 		}
 		
+		if (keyboard.keyDownOnce(77)) {
+			muteButton.setActive(!muteButton.getActive());
+			
+		}
+		
+		if (muteButton.getActive() == false) {
+			GameAnimation.overrideStop(false);
+		} else {
+			GameAnimation.overrideStop(true);
+		}
+		
+		
+		
 		for (int i = 0; i < sprites.size(); i++) {
 			DisplayableSprite sprite = sprites.get(i);
 			sprite.update(this, keyboard, actual_delta_time);
@@ -198,6 +223,8 @@ public class MenuUniverse implements Universe {
 			}
 			
 		}
+		
+		
 
 	}
 	

@@ -1,3 +1,4 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 
 
 
@@ -36,6 +38,8 @@ public class AnimationFrame extends JFrame {
 	private JLabel lblStatus;
 	private JLabel lblScoreLabel;
 	private JLabel lblScore;
+	
+	
 
 	private static boolean stop = false;
 
@@ -61,6 +65,8 @@ public class AnimationFrame extends JFrame {
 	public AnimationFrame(Animation animation)
 	{
 		super("");
+		
+		
 		
 		this.animation = animation;
 		this.setVisible(true);		

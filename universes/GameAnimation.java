@@ -44,52 +44,79 @@ public class GameAnimation implements Animation {
 	public static AudioPlayer shrekTheme = new AudioPlayer();
 	
 	
+	private static int health = 3;
+	private static int maxHealth = 3;
+	
+	private static boolean stopAll;
+	
+	
+	public static void overrideStop(boolean stop) {
+		AudioPlayer.setStopAll(stop);
+		stopAll = stop;
+	}
+	
+	public static int getHealth() {
+		return health;
+	}
+	
+	public static void lowerHealth() {
+		health --;
+	}
+	
+	public static void resetHealth() {
+		health = maxHealth;
+	}
+	
 	
 	public static void playCurrent() {
-		AudioPlayer.setStopAll(false);
-		theme.setStop(true);
-		theme1.setStop(true);
-		susTheme.setStop(true);
-		carsTheme.setStop(true);
-		shrekTheme.setStop(true);
-		
-		if (currentCar == 1) {
-			//System.out.println("yes");
-			if(theme.isPlayCompleted()) {
-				theme.playAsynchronous(car1song);
-			} else {
-				theme.setStop(false);
+		if (stopAll == false) {
+			
+			
+			AudioPlayer.setStopAll(false);
+			theme.setStop(true);
+			theme1.setStop(true);
+			susTheme.setStop(true);
+			carsTheme.setStop(true);
+			shrekTheme.setStop(true);
+			
+			if (currentCar == 1) {
+				//System.out.println("yes");
+				if(theme.isPlayCompleted()) {
+					theme.playAsynchronous(car1song);
+				} else {
+					theme.setStop(false);
+				}
+				
+			} else if (currentCar == 2) {
+				if(theme1.isPlayCompleted()) {
+					theme1.playAsynchronous(car2song);
+				} else {
+					theme1.setStop(false);
+				} 
 			}
 			
-		} else if (currentCar == 2) {
-			if(theme1.isPlayCompleted()) {
-				theme1.playAsynchronous(car2song);
-			} else {
-				theme1.setStop(false);
-			} 
-		}
-		
-		else if (currentCar == 3) {
-			if(susTheme.isPlayCompleted()) {
-				susTheme.playAsynchronous(suscarSong);
-			} else {
-				susTheme.setStop(false);
+			else if (currentCar == 3) {
+				if(susTheme.isPlayCompleted()) {
+					susTheme.playAsynchronous(suscarSong);
+				} else {
+					susTheme.setStop(false);
+				}
 			}
-		}
-		
-		else if (currentCar == 4) {
-			if(shrekTheme.isPlayCompleted()) {
-				shrekTheme.playAsynchronous(shrekCarSong);
-			} else {
-				shrekTheme.setStop(false);
+			
+			else if (currentCar == 4) {
+				if(shrekTheme.isPlayCompleted()) {
+					shrekTheme.playAsynchronous(shrekCarSong);
+				} else {
+					shrekTheme.setStop(false);
+				}
 			}
-		}
-		
-		else if (currentCar == 5) {
-			if(carsTheme.isPlayCompleted()) {
-				carsTheme.playAsynchronous(carsCarSong);
-			} else {
-				carsTheme.setStop(false);
+			
+			else if (currentCar == 5) {
+				if(carsTheme.isPlayCompleted()) {
+					carsTheme.playAsynchronous(carsCarSong);
+				} else {
+					carsTheme.setStop(false);
+				}
 			}
 		}
 		
@@ -177,13 +204,22 @@ public class GameAnimation implements Animation {
 			return new LevelUniverse("res/maps/level1.csv", 1, 16,16);
 			
 		} else if(universeCount == 5) {
-			return new LevelUniverse("res/maps/level2actual.csv", 2, 22,7);
+			//level 2
+			return new LevelUniverse("res/maps/level2.csv", 2, 22,6);
 		} else if(universeCount == 6) {
+			
 			//level 3
 			
-			return new LevelUniverse("res/maps/v2level2.csv", 3, 22,6);
-		}
-		else {
+			return new LevelUniverse("res/maps/level3.csv", 3, 22,5);
+		} else if(universeCount == 7) {
+			//level 4
+			
+			return new LevelUniverse("res/maps/level4.csv", 3, 22,6);
+		} else if(universeCount == 8) {
+			//level 5
+			
+			return new LevelUniverse("res/maps/level5.csv", 3, 22,6);
+		} else {
 			return new MenuUniverse();
 		}
 

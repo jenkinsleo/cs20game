@@ -35,6 +35,9 @@ public class Level1Background implements Background{
     private int startCol = 3;
     private int startRow = 6;
     
+    //lower is less
+    private double obstacleSpawnPercent = 0.2;
+    
     
     int[][] map;
     
@@ -48,11 +51,11 @@ public class Level1Background implements Background{
     	
     	
     	try {
-			this.road = ImageIO.read(new File("res/tiles/road.png"));
-			this.grass = ImageIO.read(new File("res/tiles/green.png"));
-			this.barrier = ImageIO.read(new File("res/tiles/barrier.png"));
-			this.turn = ImageIO.read(new File("res/tiles/turn.png"));
-			this.barrierturn = ImageIO.read(new File("res/tiles/barrier_turn.png"));
+			this.road = ImageIO.read(new File("res/tiles/updated/road.png"));
+			this.grass = ImageIO.read(new File("res/tiles/updated/green.png"));
+			this.barrier = ImageIO.read(new File("res/tiles/updated/barrier.png"));
+			this.turn = ImageIO.read(new File("res/tiles/updated/turn.png"));
+			this.barrierturn = ImageIO.read(new File("res/tiles/updated/barrier_turn.png"));
 		} catch (IOException e) {
 			
 			e.printStackTrace();
@@ -164,14 +167,16 @@ public class Level1Background implements Background{
 						barriers.add(new ExitSprite((col * TILE_WIDTH) + 30, (row * TILE_HEIGHT) + 30, ((col + 1) * TILE_WIDTH) - 30, ((row + 1) * TILE_HEIGHT) - 30, true));
 					}
 					
-					if (map[row][col] == 1 || map[row][col] == 2) {
+					if (map[row][col] == 0 || map[row][col] == 1) {
 						double rand = Math.random();
 						
-						if (rand < 0.05) {
-							System.out.println("yes");
+						if (rand < obstacleSpawnPercent) {
+							//System.out.println("yes");
+							barriers.add(new ObstacleSprite(col * TILE_WIDTH, row * TILE_HEIGHT, false));
+							//barriers.add(new ObstacleSprite(col * TILE_WIDTH, row * TILE_HEIGHT, false));
 						}
 					}
-				} catch (Exception e) {
+					} catch (Exception e) {
 					//e.printStackTrace();
 				}
 				 

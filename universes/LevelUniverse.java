@@ -14,6 +14,10 @@ public class LevelUniverse implements Universe {
 	private int retry = 0;
 	private int level;
 	
+	private DisplayableSprite healthBar = null;
+	
+	
+	
 	private boolean menu = false;
 
 	public LevelUniverse (String mapPath, int level, int startRow, int startCol) {
@@ -29,7 +33,9 @@ public class LevelUniverse implements Universe {
 		
 		player1 = new CarSprite(Level1Background.TILE_HEIGHT * (startCol + 0.5), Level1Background.TILE_WIDTH * (startRow + 0.5));
 		driftMsg = new DriftMsgSprite(this.xCenter,this.yCenter);
+		healthBar = new HealthBarSprite(player1.getCenterX(), player1.getCenterY());
 		
+		sprites.add(healthBar);
 		sprites.add(player1);
 		sprites.add(driftMsg);
 		sprites.addAll(barriers);
@@ -97,6 +103,9 @@ public class LevelUniverse implements Universe {
 	
 	public void update(KeyboardInput keyboard, long actual_delta_time) {
 		
+		((HealthBarSprite) healthBar).setCenterX(player1.getCenterX() + 390);
+		((HealthBarSprite) healthBar).setCenterY(player1.getCenterY() + 290);
+		
 		GameAnimation.playCurrent();
 		complete = ((CarSprite) player1).getComplete();
 		((DriftMsgSprite) driftMsg).setActive(((CarSprite) player1).driftType());
@@ -116,7 +125,9 @@ public class LevelUniverse implements Universe {
 			menu = true;
 		}
 		
-		
+		if (keyboard.keyDownOnce(70)) {
+			complete = true;
+		}
 		
 		
 		for (int i = 0; i < sprites.size(); i++) {

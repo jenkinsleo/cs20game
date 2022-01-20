@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class ButtonSprite implements MovableSprite, DisplayableSprite{
+public class HealthBarSprite implements MovableSprite, DisplayableSprite{
 	private double centerX = 0;
 	private double centerY = 0;
 	private double width = 110;
@@ -15,37 +15,45 @@ public class ButtonSprite implements MovableSprite, DisplayableSprite{
 	private boolean active = false;
 	
 	
-	private Image image;
-	private Image activeImage;
+	private Image noHealth;
+	private Image lastHealth;
+	private Image halfHealth;
+	private Image fullHealth;
 	
-	public ButtonSprite(double centerX, double centerY, Image image1, Image image2) {
+	
+	public HealthBarSprite(double centerX, double centerY) {
 		this.centerX = centerX;
 		this.centerY = centerY;
 		
-		this.image = image1;
-		this.activeImage = image2;
+		try {
+			noHealth = ImageIO.read(new File("res/heart/0.png"));
+			lastHealth = ImageIO.read(new File("res/heart/1.png"));
+			halfHealth = ImageIO.read(new File("res/heart/2.png"));
+			fullHealth = ImageIO.read(new File("res/heart/3.png"));
+		}catch (Exception e) {
+			
+		}
 		
-		this.width = image.getWidth(null);
-		this.height = image.getHeight(null);
+		this.width = 200;
+		this.height = 62.5;
 		
 		
 		
-	}
-	
-	public ButtonSprite(double centerX, double centerY, Image image1, Image image2, double width, double height) {
-		this(centerX,centerY,image1,image2);
-		
-		this.width = width;
-		this.height = height;
 	}
 
 	@Override
 	public Image getImage() {
 		// TODO Auto-generated method stub
-		if (active == true) {
-			return this.activeImage;
+		if (GameAnimation.getHealth() == 0) {
+			return this.noHealth;
+		} else if (GameAnimation.getHealth() == 1) {
+			return this.lastHealth;
+		} else if (GameAnimation.getHealth() == 2) {
+			return this.halfHealth;
+		} else if (GameAnimation.getHealth() == 3) {
+			return this.fullHealth;
 		} else {
-			return this.image;
+			return this.noHealth;
 		}
 		
 	}
@@ -104,13 +112,13 @@ public class ButtonSprite implements MovableSprite, DisplayableSprite{
 	@Override
 	public void setCenterX(double centerX) {
 		// TODO Auto-generated method stub
-		
+		this.centerX = centerX;
 	}
 
 	@Override
 	public void setCenterY(double centerY) {
 		// TODO Auto-generated method stub
-		
+		this.centerY = centerY;
 	}
 
 	@Override
@@ -129,10 +137,6 @@ public class ButtonSprite implements MovableSprite, DisplayableSprite{
 	public void stop() {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	public boolean getActive() {
-		return this.active;
 	}
 
 }

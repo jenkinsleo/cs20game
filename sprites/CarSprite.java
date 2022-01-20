@@ -24,8 +24,8 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	
 	private double centerX = 0;
 	private double centerY = 0;
-	private double width = 95;
-	private double height = 95;
+	private double width = 85;
+	private double height = 85;
 	private boolean dispose = false;	
 
 	private final double VELOCITY = 200;
@@ -35,7 +35,11 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	private double forwardSpeed = 0;
 	private boolean fail = false;
 	private boolean complete = false;
+	 
+	private int collisionFrameCounter = 0;
 	
+	
+	private boolean controlLock = false;
 	
 	
 	
@@ -52,6 +56,8 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	private String mcqueen = "res/tiles/mcqueencar.png";
 	
 	public CarSprite(double centerX, double centerY) {
+		
+		GameAnimation.resetHealth();
 		this.centerX = centerX;
 		this.centerY = centerY;
 		
@@ -69,6 +75,10 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 					if (GameAnimation.getCurrentCar() == mcqueen) {
 						this.ACCELERATION *= 1.5;
 						this.TOPSPEED = 40;
+					} 
+					else {
+						this.ACCELERATION = 1000;
+						this.TOPSPEED = 30;
 					}
 					
 				} catch (IOException e) {
@@ -180,35 +190,9 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	@Override
 	public void update(Universe universe, KeyboardInput keyboard, long actual_delta_time) {
 		boolean accel = false;
-		//LEFT	
-		if (keyboard.keyDown(37)) {
-			currentAngle -= ((ROTATION_SPEED * this.getSpeed()) * (actual_delta_time * 0.001));
-		}
-		// RIGHT
-		if (keyboard.keyDown(39)) {
-			currentAngle += ((ROTATION_SPEED * this.getSpeed()) * (actual_delta_time * 0.001));
-		}
-		//UP
-		if (keyboard.keyDown(38)) {
-			this.currentlyDrifting = false;
-			accel = true;
-			if(this.getSpeed() < this.TOPSPEED) {
-				forwardSpeed -= ACCELERATION * (actual_delta_time * 0.001);
-			}
-			
-			
-		} else {
-			if (forwardSpeed < 0) {
-				
-				forwardSpeed += (900 * 0.6) * (actual_delta_time * 0.001);
-			} else {
-				forwardSpeed = 0;
-			}
-			
-		}
 		
-		// DOWN
-		if (keyboard.keyDown(40)) {
+		//down
+		if (keyboard.keyDown(40) || controlLock == true) {
 			this.currentlyDrifting = false;
 			accel = true;
 			forwardSpeed += (ACCELERATION * 2) * (actual_delta_time * 0.001);
@@ -218,52 +202,104 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 		}
 		
 		
-		if (currentAngle >= 360) {
-			currentAngle -= 360;
-		}
-		if (currentAngle < 0) {
-			currentAngle += 360;
-		}	
-		
-		
-		
-		if (accel == true) {
-			lastAngle = currentAngle;
-			newAngle = lastAngle;
+		if (controlLock == false) {
+			//LEFT	
+			if (keyboard.keyDown(37) ) {
+				currentAngle -= ((ROTATION_SPEED * this.getSpeed()) * (actual_delta_time * 0.001));
+			}
+			// RIGHT
+			if (keyboard.keyDown(39)) {
+				currentAngle += ((ROTATION_SPEED * this.getSpeed()) * (actual_delta_time * 0.001));
+			}
 			
-			currentAngle %= 360;
-			double angleInRadians = Math.toRadians(currentAngle);
-			velocityX = Math.cos(angleInRadians) * forwardSpeed * actual_delta_time * 0.01;
-			velocityY = Math.sin(angleInRadians) * forwardSpeed * actual_delta_time * 0.01;
-			
-			
-		} else {
-			int change;
-			
-			if (this.getSpeed() < TOPSPEED -5) {
-				change = 15;
+			//UP
+			if (keyboard.keyDown(38)) {
+				this.currentlyDrifting = false;
+				accel = true;
+				if(this.getSpeed() < this.TOPSPEED) {
+					forwardSpeed -= ACCELERATION * (actual_delta_time * 0.001);
+				}
+				
+				
 			} else {
-				change = 11;
+				if (forwardSpeed < 0) {
+					
+					forwardSpeed += (900 * 0.6) * (actual_delta_time * 0.001);
+					
+				} else {
+					forwardSpeed = 0;
+				}
+				
 			}
-			if (getAngleChange() > 15) {
-				lastAngle %= 360;
-				lastAngle += change * actual_delta_time * 0.01;
-				if (lastAngle >= 360) {
-					lastAngle -= 360;
+			
+			
+		}
+			if (controlLock == true) {
+				currentAngle -= ((ROTATION_SPEED * this.getSpeed()) * (actual_delta_time * 0.001));
+				
+				if (forwardSpeed > 0) {
+					fail = true;
 				}
-				if (lastAngle < 0) {
-					lastAngle += 360;
-				}
-			} else if (getAngleChange() < -15) {
-				lastAngle %= 360;
-				lastAngle -= change * actual_delta_time * 0.01;
-				if (lastAngle >= 360) {
-					lastAngle -= 360;
-				}
-				if (lastAngle < 0) {
-					lastAngle += 360;
-				}
+				
+				
 			}
+			
+			if (currentAngle >= 360) {
+				currentAngle -= 360;
+			}
+			if (currentAngle < 0) {
+				currentAngle += 360;
+			}	
+			
+		
+		
+		
+		
+			if (accel == true) {
+				double angleInRadians;
+				if (controlLock == false) {
+					lastAngle = currentAngle;
+					newAngle = lastAngle;
+				
+				currentAngle %= 360;
+				angleInRadians = Math.toRadians(currentAngle);
+				} else {
+					angleInRadians = Math.toRadians(lastAngle);
+				}
+				
+				velocityX = Math.cos(angleInRadians) * forwardSpeed * actual_delta_time * 0.01;
+				velocityY = Math.sin(angleInRadians) * forwardSpeed * actual_delta_time * 0.01;
+				
+				
+			} else {
+				int change;
+				
+				if (this.getSpeed() < TOPSPEED -5) {
+					change = 15;
+				} else {
+					change = 11;
+				}
+				if (getAngleChange() > 15) {
+					lastAngle %= 360;
+					lastAngle += change * actual_delta_time * 0.01;
+					if (lastAngle >= 360) {
+						lastAngle -= 360;
+					}
+					if (lastAngle < 0) {
+						lastAngle += 360;
+					}
+				} else if (getAngleChange() < -15) {
+					lastAngle %= 360;
+					lastAngle -= change * actual_delta_time * 0.01;
+					if (lastAngle >= 360) {
+						lastAngle -= 360;
+					}
+					if (lastAngle < 0) {
+						lastAngle += 360;
+					}
+				}
+			
+		
 			
 			double angleInRadians = Math.toRadians(lastAngle);
 			velocityX = Math.cos(angleInRadians) * forwardSpeed * actual_delta_time * 0.01;
@@ -281,7 +317,7 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 		testCollision(universe, movement_x, movement_y);
 		isAtExit(universe, movement_x, movement_y);
 		makeScore(actual_delta_time);
-		
+		pauseObstacle(universe, movement_x, movement_y);
 		
 		
 		
@@ -304,9 +340,35 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 					
 					
 					fail = true;
+					
 					break;					
 				}
+			} else if (sprite instanceof ObstacleSprite) {
+				
+				if (CollisionDetection.overlaps(this.getMinX(), this.getMinY(), 
+						this.getMaxX(), this.getMaxY(), 
+						sprite.getMinX() ,sprite.getMinY() , 
+						sprite.getMaxX() , sprite.getMaxY() )) {
+					
+					
+					if (sprite.getDispose() == false) {
+						GameAnimation.lowerHealth();
+					((ObstacleSprite) sprite).setDispose(true);
+					
+					
+					if (GameAnimation.getHealth() <= 0) {
+						controlLock = true;
+					}
+					
+					}
+					
+									
+				}
+				
+				
 			}
+			
+			
 		}		
 	}
 	
@@ -315,12 +377,12 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 		for (DisplayableSprite sprite : sprites.getSprites()) {
 			if (sprite instanceof ExitSprite) {
 				
-				if (CollisionDetection.overlaps(this.getMinX() + deltaX, this.getMinY() + deltaY, 
-						this.getMaxX()  + deltaX, this.getMaxY() + deltaY, 
+				if (CollisionDetection.overlaps(this.getMinX(), this.getMinY(), 
+						this.getMaxX(), this.getMaxY(), 
 						sprite.getMinX(),sprite.getMinY(), 
 						sprite.getMaxX(), sprite.getMaxY())) {
-					System.out.println("fail");
-					//adds score and dispose coin
+					
+					
 					
 					//plays sound
 					
@@ -346,44 +408,71 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 		return a;
 	}
 	private void makeScore(long actual_delta_time) {
-		//adds bit of score for every amount of time over halfway of max speed
-		long newScore = 0;
-		
-		if (this.getSpeed() == TOPSPEED) {
-			newScore += actual_delta_time * 0.06;
+		if (controlLock == false) {
+			//adds bit of score for every amount of time over halfway of max speed
+			long newScore = 0;
 			
-		} else if(this.getSpeed() > TOPSPEED - 5) {
-			newScore += actual_delta_time * 0.02;
-		} else if(this.getSpeed() > TOPSPEED / 2) {
-			newScore += actual_delta_time * 0.01;
-		}
-		
-		double actualChange = getActualChange();
-		if (currentlyDrifting == false) {
-			notDriftSpeed = (int) this.getSpeed();
-		} else if(this.getSpeed() < notDriftSpeed - 5) {
-			actualChange = 0;
-		}
-		
-		
-		if (actualChange > 90 || actualChange * -1 > 90 ) {
-			currentlyDrifting = true;
-			newScore += actual_delta_time * 0.2;
-			this.driftMsg = 2;
-		} else if (actualChange > 45 || actualChange * -1 > 45) {
-			currentlyDrifting = true;
-			newScore += actual_delta_time * 0.1;
-			this.driftMsg = 1;
-		} else {
+			if (this.getSpeed() == TOPSPEED) {
+				newScore += actual_delta_time * 0.06;
+				
+			} else if(this.getSpeed() > TOPSPEED - 5) {
+				newScore += actual_delta_time * 0.02;
+			} else if(this.getSpeed() > TOPSPEED / 2) {
+				newScore += actual_delta_time * 0.01;
+			}
 			
-			this.driftMsg = 0;
+			double actualChange = getActualChange();
+			if (currentlyDrifting == false) {
+				notDriftSpeed = (int) this.getSpeed();
+			} else if(this.getSpeed() < notDriftSpeed - 5) {
+				actualChange = 0;
+			}
+			
+			
+			if (actualChange > 90 || actualChange * -1 > 90 ) {
+				currentlyDrifting = true;
+				newScore += actual_delta_time * 0.2;
+				this.driftMsg = 2;
+			} else if (actualChange > 45 || actualChange * -1 > 45) {
+				currentlyDrifting = true;
+				newScore += actual_delta_time * 0.1;
+				this.driftMsg = 1;
+			} else {
+				
+				this.driftMsg = 0;
+			}
+			
+			
+			GameAnimation.addScore(newScore);
 		}
 		
 		
-		GameAnimation.addScore(newScore);
-		
-		
-		
+	}
+	
+	private void pauseObstacle(Universe sprites, double deltaX, double deltaY) {
+		for (DisplayableSprite sprite: sprites.getSprites()) {
+			if (sprite instanceof ObstacleSprite) {
+				
+					//check if within 100 pixels
+					// formula is sqaure root of  y1-x1 squared + y2-x2 squared
+					double x1 = this.centerX;
+					double y1 = this.centerY;
+					
+					double x2 = sprite.getCenterX();
+					double y2 = sprite.getCenterY();
+					
+					int distanceBetween = (int) Math.sqrt(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2- y1)));
+					if (distanceBetween < 200) {
+						((ObstacleSprite) sprite).pause(true);
+						
+						//System.out.println("pause");
+					} else {
+						((ObstacleSprite) sprite).pause(false);
+					}
+					
+				}
+			
+		}
 	}
 	
 	public int driftType() {
