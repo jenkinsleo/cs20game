@@ -5,6 +5,8 @@ import javax.imageio.ImageIO;
 public class GameAnimation implements Animation {
 
 	private static int universeCount = 0;
+	
+	private static int actualUniverseCount = 0;
 	private static int retry = 0;
 	private static long score = 0000;
 	
@@ -49,7 +51,23 @@ public class GameAnimation implements Animation {
 	
 	private static boolean stopAll;
 	
+	private static boolean universeCondition = false;
+	private static boolean passfailCondition;
 	
+	public static void betweenLevel(boolean pass) {
+		GameAnimation.actualUniverseCount = GameAnimation.universeCount;
+		universeCondition = true;
+		
+		if (pass) {
+			passfailCondition = true;
+		} else {
+			passfailCondition = false;
+		}
+		
+		
+		
+		
+	}
 	public static void overrideStop(boolean stop) {
 		AudioPlayer.setStopAll(stop);
 		stopAll = stop;
@@ -181,47 +199,52 @@ public class GameAnimation implements Animation {
 
 	public Universe getNextUniverse() {
 		
-		
-		
-		universeCount ++;
-		
-		
-		
-		if (universeCount == 1) {
-			return new MenuUniverse();
-		} else if(universeCount == 2) {
-			
-			return null;
+		if (universeCondition == false) {
+			universeCount ++;
 			
 			
-		} else if(universeCount == 3) {
-			AudioPlayer.setStopAll(false);
-			//tutorial 
-			return new TutorialUniverse("res/maps/tutorial.csv", 0, 8,3);
-		} else if(universeCount == 4) {
-			//level 1
-			AudioPlayer.setStopAll(false);
-			return new LevelUniverse("res/maps/level1.csv", 1, 16,16);
 			
-		} else if(universeCount == 5) {
-			//level 2
-			return new LevelUniverse("res/maps/level2.csv", 2, 22,6);
-		} else if(universeCount == 6) {
-			
-			//level 3
-			
-			return new LevelUniverse("res/maps/level3.csv", 3, 22,5);
-		} else if(universeCount == 7) {
-			//level 4
-			
-			return new LevelUniverse("res/maps/level4.csv", 3, 22,6);
-		} else if(universeCount == 8) {
-			//level 5
-			
-			return new LevelUniverse("res/maps/level5.csv", 3, 22,6);
+			if (universeCount == 1) {
+				return new MenuUniverse();
+			} else if(universeCount == 2) {
+				
+				return null;
+				
+				
+			} else if(universeCount == 3) {
+				AudioPlayer.setStopAll(false);
+				//tutorial 
+				return new TutorialUniverse("res/maps/tutorial.csv", 0, 8,3);
+			} else if(universeCount == 4) {
+				//level 1
+				AudioPlayer.setStopAll(false);
+				return new LevelUniverse("res/maps/level1.csv", 1, 16,16);
+				
+			} else if(universeCount == 5) {
+				//level 2
+				return new LevelUniverse("res/maps/level2.csv", 2, 22,6);
+			} else if(universeCount == 6) {
+				
+				//level 3
+				
+				return new LevelUniverse("res/maps/level3.csv", 3, 22,5);
+			} else if(universeCount == 7) {
+				//level 4
+				
+				return new LevelUniverse("res/maps/level4.csv", 3, 22,6);
+			} else if(universeCount == 8) {
+				//level 5
+				
+				return new LevelUniverse("res/maps/level5.csv", 3, 22,6);
+			} else {
+				return null;
+			}
 		} else {
-			return new MenuUniverse();
+			GameAnimation.universeCondition = false;
+			return new BetweenLevelUniverse(GameAnimation.passfailCondition, GameAnimation.universeCount);
 		}
+		
+		
 
 	}
 

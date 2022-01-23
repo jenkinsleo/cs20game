@@ -108,12 +108,19 @@ public class LevelUniverse implements Universe {
 		
 		GameAnimation.playCurrent();
 		complete = ((CarSprite) player1).getComplete();
+		
+		if (complete == true) {
+			GameAnimation.betweenLevel(true);
+		}
+		
+		
 		((DriftMsgSprite) driftMsg).setActive(((CarSprite) player1).driftType());
 		((DriftMsgSprite) driftMsg).setCenterX(player1.getCenterX());
 		((DriftMsgSprite) driftMsg).setCenterY(player1.getCenterY() + 200);
 		//System.out.println(((CarSprite) player1).driftType());
 		
 		if (((CarSprite) player1).fail()) {
+			GameAnimation.betweenLevel(false);
 			complete = true;
 			failure = true;
 			retry ++;

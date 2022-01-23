@@ -15,7 +15,7 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	
 	private double ACCELERATION = 1000;
 	private double ROTATION_SPEED = 15;
-	public static double TOPSPEED = 30;
+	public static double TOPSPEED = 27;
 	private double currentAngle = 90;
 	
 	private double lastAngle = 90;
@@ -192,7 +192,7 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 		boolean accel = false;
 		
 		//down
-		if (keyboard.keyDown(40) || controlLock == true) {
+		if (keyboard.keyDown(83) || controlLock == true) {
 			this.currentlyDrifting = false;
 			accel = true;
 			forwardSpeed += (ACCELERATION * 2) * (actual_delta_time * 0.001);
@@ -204,16 +204,16 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 		
 		if (controlLock == false) {
 			//LEFT	
-			if (keyboard.keyDown(37) ) {
+			if (keyboard.keyDown(65) ) {
 				currentAngle -= ((ROTATION_SPEED * this.getSpeed()) * (actual_delta_time * 0.001));
 			}
 			// RIGHT
-			if (keyboard.keyDown(39)) {
+			if (keyboard.keyDown(68)) {
 				currentAngle += ((ROTATION_SPEED * this.getSpeed()) * (actual_delta_time * 0.001));
 			}
 			
 			//UP
-			if (keyboard.keyDown(38)) {
+			if (keyboard.keyDown(87)) {
 				this.currentlyDrifting = false;
 				accel = true;
 				if(this.getSpeed() < this.TOPSPEED) {
