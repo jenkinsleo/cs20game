@@ -20,6 +20,8 @@ public class Level1Background implements Background{
     private Image turn;
     private Image barrierturn;
     
+    private boolean tutorial;
+    
     private HashMap<Integer, Image> mapDict = new HashMap<Integer, Image>();
     
     private int roadNum = 1;
@@ -36,16 +38,17 @@ public class Level1Background implements Background{
     private int startRow = 6;
     
     //lower is less
-    private double obstacleSpawnPercent = 0.2;
+    private double obstacleSpawnPercent = 0.55;
     
     
     int[][] map;
     
-    public Level1Background(int[][] map) {
-    	this.map = map;
+    public Level1Background(int[][] map, boolean tutorial) {
+    	this.tutorial = tutorial;
+    	this.map = (int[][]) map;
     	
-    	this.maxRows = map.length - 1;
-    	this.maxCols = map[0].length - 1;
+    	this.maxRows = this.map.length - 1;
+    	this.maxCols = this.map[0].length - 1;
     	
     	
     	
@@ -60,7 +63,7 @@ public class Level1Background implements Background{
 			
 			e.printStackTrace();
 		}
-    	System.out.println(Arrays.deepToString(map));
+    	
     	try {
     		
     		
@@ -95,6 +98,12 @@ public class Level1Background implements Background{
     		//do nothing
     	}
     }
+    
+    
+
+	
+
+	
 
 	@Override
 	public Tile getTile(int col, int row) {
@@ -155,8 +164,7 @@ public class Level1Background implements Background{
 	
 	public ArrayList<DisplayableSprite> getBarriers() {
 		ArrayList<DisplayableSprite> barriers = new ArrayList<DisplayableSprite>();
-		System.out.println(this.maxRows);
-		System.out.println(this.maxCols);
+		
 		for (int row = 0; row < map.length; row++) {
 			for (int col = 0; col < map[0].length; col++) {
 				try {
@@ -166,6 +174,8 @@ public class Level1Background implements Background{
 					} else if (map[row][col]  >= 16 && map[row][col] <= 19) {
 						barriers.add(new ExitSprite((col * TILE_WIDTH) + 30, (row * TILE_HEIGHT) + 30, ((col + 1) * TILE_WIDTH) - 30, ((row + 1) * TILE_HEIGHT) - 30, true));
 					}
+					if (tutorial == false) {
+						
 					
 					if (map[row][col] == 0 || map[row][col] == 1) {
 						double rand = Math.random();
@@ -176,9 +186,11 @@ public class Level1Background implements Background{
 							//barriers.add(new ObstacleSprite(col * TILE_WIDTH, row * TILE_HEIGHT, false));
 						}
 					}
+					}
 					} catch (Exception e) {
 					//e.printStackTrace();
 				}
+				
 				 
 			}
 		}

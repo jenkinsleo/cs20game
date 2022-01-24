@@ -218,26 +218,26 @@ public class GameAnimation implements Animation {
 			} else if(universeCount == 4) {
 				//level 1
 				AudioPlayer.setStopAll(false);
-				return new LevelUniverse("res/maps/level1.csv", 1, 16,16);
+				return new LevelUniverse("res/maps/exportlevel1.csv", 1, 16,16);
 				
 			} else if(universeCount == 5) {
 				//level 2
-				return new LevelUniverse("res/maps/level2.csv", 2, 22,6);
+				return new LevelUniverse("res/maps/exportlevel2.csv", 2, 20,9);
 			} else if(universeCount == 6) {
 				
 				//level 3
 				
-				return new LevelUniverse("res/maps/level3.csv", 3, 22,5);
+				return new LevelUniverse("res/maps/exportlevel3.csv", 3, 20,8);
 			} else if(universeCount == 7) {
 				//level 4
 				
-				return new LevelUniverse("res/maps/level4.csv", 3, 22,6);
+				return new LevelUniverse("res/maps/exportlevel4.csv", 4, 21,10);
 			} else if(universeCount == 8) {
 				//level 5
 				
-				return new LevelUniverse("res/maps/level5.csv", 3, 22,6);
+				return new LevelUniverse("res/maps/exportlevel5.csv", 5, 22,5);
 			} else {
-				return null;
+				return new MenuUniverse();
 			}
 		} else {
 			GameAnimation.universeCondition = false;

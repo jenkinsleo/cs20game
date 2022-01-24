@@ -93,7 +93,7 @@ public class MenuUniverse implements Universe {
 		
 		
 		
-		this.background = new Level1Background(CSVReader.importFromCSV("res/maps/menumap.csv"));
+		this.background = new Level1Background(CSVReader.importFromCSV("res/maps/menumap.csv"), false);
 	
 	}
 	

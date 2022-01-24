@@ -24,7 +24,7 @@ public class TutorialUniverse implements Universe {
 	public TutorialUniverse (String mapPath, int level, int startRow, int startCol) {
 		this.level = level;
 
-		background = new Level1Background(CSVReader.importFromCSV(mapPath));
+		background = new Level1Background(CSVReader.importFromCSV(mapPath), true);
 		ArrayList<DisplayableSprite> barriers = ((Level1Background)background).getBarriers();
 		
 		((Level1Background) background).getBarriers();

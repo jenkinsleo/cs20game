@@ -23,7 +23,7 @@ public class LevelUniverse implements Universe {
 	public LevelUniverse (String mapPath, int level, int startRow, int startCol) {
 		this.level = level;
 
-		background = new Level1Background(CSVReader.importFromCSV(mapPath));
+		background = new Level1Background(CSVReader.importFromCSV(mapPath), false);
 		ArrayList<DisplayableSprite> barriers = ((Level1Background)background).getBarriers();
 		
 		((Level1Background) background).getBarriers();

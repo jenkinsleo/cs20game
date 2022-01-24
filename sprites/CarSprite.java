@@ -13,7 +13,9 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	private Image rotatedImage;
 	private static Image[] rotatedImages = new Image[360];
 	
-	private double ACCELERATION = 1000;
+	private double accel_var = 2000;
+	private double speed_var = 30;
+	private double ACCELERATION = accel_var;
 	private double ROTATION_SPEED = 15;
 	public static double TOPSPEED = 27;
 	private double currentAngle = 90;
@@ -74,11 +76,11 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 					
 					if (GameAnimation.getCurrentCar() == mcqueen) {
 						this.ACCELERATION *= 1.5;
-						this.TOPSPEED = 40;
+						this.TOPSPEED = speed_var + 10;
 					} 
 					else {
-						this.ACCELERATION = 1000;
-						this.TOPSPEED = 30;
+						this.ACCELERATION = accel_var;
+						this.TOPSPEED = speed_var;
 					}
 					
 				} catch (IOException e) {
@@ -189,6 +191,15 @@ public class CarSprite implements MovableSprite, DisplayableSprite {
 	}
 	@Override
 	public void update(Universe universe, KeyboardInput keyboard, long actual_delta_time) {
+		
+		if (this.getSpeed() > TOPSPEED * 0.75) {
+			this.ACCELERATION = accel_var * 0.4;
+		} else if (this.getSpeed() > TOPSPEED * 0.5) {
+			this.ACCELERATION = accel_var * 0.6;
+		} else {
+			this.ACCELERATION = accel_var;
+		}
+		
 		boolean accel = false;
 		
 		//down
